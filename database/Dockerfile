@@ -1,7 +1,9 @@
 FROM mongo
 
-WORKDIR mongo
+WORKDIR /data/db
 
-COPY .  .
+# Copy data folder containing JSON file
+COPY ./data/sample_posts.json /data/sample_posts.json
 
-ENTRYPOINT ["mongod"]
+# Run MongoDB and import data
+CMD ["sh", "-c", "mongod --bind_ip_all & sleep 5 && mongoimport --db wanderlust --collection posts --file /data/sample_posts.json --jsonArray && tail -f /dev/null"]
